@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Maintenance.Console": {
+      "commandName": "Project",
+      "commandLineArgs": "update -p D:\\walker\\demo\\MaintainceTest\\MaintainceTest_1.0.0.smm -d D:\\walker\\demo\\MaintainceTest\\1111"
+    }
+  }
+}
