@@ -1,6 +1,5 @@
 ﻿using Maintenance.Console.Domain.ScriptExecutor;
 using System.IO.Compression;
-using System.Text.Json;
 
 namespace Maintenance.Console.Domain
 {
@@ -36,33 +35,47 @@ namespace Maintenance.Console.Domain
 
             // 这里备份
             var refFile = Path.Combine(rootTempDir, Constants.List);
-            if (File.Exists(refFile))
+            List<string> allFiles = new List<string>();
+            if (!File.Exists(refFile))
+            {
+                Message.ShowMessageWithColor(ConsoleColor.Yellow, $"补丁包文件缺失--{Constants.List}");
+                allFiles = ListReader.GenerateFileList(Path.Combine(rootTempDir, Constants.ResourceDir));
+            }
+            else
             {
                 var listContent = File.ReadAllLines(refFile);
-                var allFiles = listContent.Select(x => x.Split(" ")[1]).ToList();
-                var bkDir = Path.Combine(rootTempDir, Constants.BackupDir);
-                if (!Directory.Exists(bkDir))
-                    Directory.CreateDirectory(bkDir);
-                CopyFileList(allFiles, targetDir, bkDir);
+                allFiles = File.ReadAllLines(refFile).Select(x => x.Split(" ")[1]).ToList();
             }
-            // //还原
-            // CopyFileList(allFiles, bkDir, targetDir);
+            var bkDir = Path.Combine(rootTempDir, Constants.BackupDir);
+            if (!Directory.Exists(bkDir))
+                Directory.CreateDirectory(bkDir);
+            CopyFileList(allFiles, targetDir, bkDir);
 
-            var script1 = Path.Combine(rootTempDir, Constants.ScriptsBeforeReplace);
-            if (File.Exists(script1))
-                CMDExecutor.Run(script1);
+            try
+            {
+                var script1 = Path.Combine(rootTempDir, Constants.ScriptsBeforeReplace);
+                if (File.Exists(script1))
+                    Message.ShowMessageWithColor(ConsoleColor.DarkCyan, CMDExecutor.Run(script1));
 
-            Message.ShowMessageWithColor(ConsoleColor.Blue, $"正在更新文件...");
-            CopyDirectory(Path.Combine(rootTempDir, Constants.ResourceDir), targetDir);
-            Message.ShowMessageWithColor(ConsoleColor.Blue, $"更新完成");
+                Message.ShowMessageWithColor(ConsoleColor.Blue, $"正在更新文件...");
+                CopyDirectory(Path.Combine(rootTempDir, Constants.ResourceDir), targetDir);
+                Message.ShowMessageWithColor(ConsoleColor.Blue, $"更新完成");
 
-            var script0 = Path.Combine(rootTempDir, Constants.ScriptsFinally);
-            if (File.Exists(script0))
-                Message.ShowMessageWithColor(ConsoleColor.White, CMDExecutor.Run(script0));
-
-            Message.ShowMessageWithColor(ConsoleColor.Blue, $"正在清理临时文件...");
-            Directory.Delete(rootTempDir, true);
-            Message.ShowMessageWithColor(ConsoleColor.Blue, $"清理完成");
+                var script0 = Path.Combine(rootTempDir, Constants.ScriptsFinally);
+                if (File.Exists(script0))
+                    Message.ShowMessageWithColor(ConsoleColor.DarkCyan, CMDExecutor.Run(script0));
+            }
+            catch (Exception ex)
+            {
+                Message.ShowMessageWithColor(ConsoleColor.Red, $"更新失败，即将回滚。失败原因：{ex.Message}");
+                CopyFileList(allFiles, bkDir, targetDir);
+            }
+            finally
+            {
+                Message.ShowMessageWithColor(ConsoleColor.Blue, $"正在清理临时文件...");
+                Directory.Delete(rootTempDir, true);
+                Message.ShowMessageWithColor(ConsoleColor.Blue, $"清理完成");
+            }
         }
 
         static void CopyFileList(List<string> fileList, string from, string to)

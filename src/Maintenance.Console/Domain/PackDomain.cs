@@ -13,7 +13,7 @@ namespace Maintenance.Console.Domain
             if (string.IsNullOrWhiteSpace(o.PackageConfig))
                 o.PackageConfig = Path.Combine(o.Dir, Constants.MetaFileName);
 
-            var meta = ReadPackageMeta(o.PackageConfig);
+            var meta = MaintenanceMeta.ReadPackageMeta(o.PackageConfig);
 
             if (string.IsNullOrEmpty(o.OutPut))
                 o.OutPut = $"{Path.GetFileNameWithoutExtension(o.Dir)}_{meta.Version}.smm";
@@ -55,28 +55,7 @@ namespace Maintenance.Console.Domain
             File.Delete(tempListFile);
         }
 
-        public static MaintenanceMeta ReadPackageMeta(string metaFile)
-        {
-            if (!File.Exists(metaFile))
-                return MaintenanceMeta.Default();
 
-            var content = File.ReadAllText(metaFile);
-            if (string.IsNullOrWhiteSpace(content))
-                return MaintenanceMeta.Default();
-
-            try
-            {
-                var model = JsonSerializer.Deserialize<MaintenanceMeta>(content, MaintenanceMetaContext.Default.MaintenanceMeta);
-                if (model == null)
-                    return MaintenanceMeta.Default();
-                return model;
-            }
-            catch (Exception ex)
-            {
-                Message.ShowMessageWithColor(ConsoleColor.Yellow, "配置文件格式不正确，读取失败:" + ex.Message);
-                return MaintenanceMeta.Default();
-            }
-        }
     }
 
 }

@@ -6,7 +6,10 @@ namespace Maintenance.Console.Domain.ScriptExecutor
     {
         public static string Run(string command)
         {
+            command = command.Replace("{{WORKDIR}}", Environment.CurrentDirectory);
+
             Process process = new Process();
+            process.StartInfo.WorkingDirectory = Path.GetDirectoryName(command);
             process.StartInfo.FileName = "cmd.exe"; // 指定要执行的命令解释器（这里是 cmd）
             process.StartInfo.Arguments = $"/c {command}"; // 指定要执行的命令及参数，/c 表示执行完命令后关闭 cmd 窗口
             process.StartInfo.UseShellExecute = false; // 不使用操作系统外壳程序启动进程
