@@ -1,10 +1,12 @@
-﻿using System.IO.Compression;
+﻿using Maintenance.Console.Domain.ScriptExecutor;
+using System.IO.Compression;
+using System.Text.Json;
 
 namespace Maintenance.Console.Domain
 {
     internal class UpdationDomain
     {
-        public static void CoverDir(string patcher, string targetDir)
+        public static void Core(string patcher, string targetDir)
         {
             if (!File.Exists(patcher))
             {
@@ -46,9 +48,17 @@ namespace Maintenance.Console.Domain
             // //还原
             // CopyFileList(allFiles, bkDir, targetDir);
 
+            var script1 = Path.Combine(rootTempDir, Constants.ScriptsBeforeReplace);
+            if (File.Exists(script1))
+                CMDExecutor.Run(script1);
+
             Message.ShowMessageWithColor(ConsoleColor.Blue, $"正在更新文件...");
             CopyDirectory(Path.Combine(rootTempDir, Constants.ResourceDir), targetDir);
             Message.ShowMessageWithColor(ConsoleColor.Blue, $"更新完成");
+
+            var script0 = Path.Combine(rootTempDir, Constants.ScriptsFinally);
+            if (File.Exists(script0))
+                Message.ShowMessageWithColor(ConsoleColor.White, CMDExecutor.Run(script0));
 
             Message.ShowMessageWithColor(ConsoleColor.Blue, $"正在清理临时文件...");
             Directory.Delete(rootTempDir, true);
@@ -65,7 +75,9 @@ namespace Maintenance.Console.Domain
                 var fullFromDir = Path.GetDirectoryName(fullFromPath);
                 if (!string.IsNullOrEmpty(fullFromDir) && !Directory.Exists(fullFromDir))
                     Directory.CreateDirectory(fullFromDir);
-                File.Copy(fullFromPath, fullToPath);
+
+                if (File.Exists(fullFromPath))
+                    File.Copy(fullFromPath, fullToPath, true);
             }
         }
 

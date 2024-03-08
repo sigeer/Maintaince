@@ -27,7 +27,7 @@ namespace Maintenance.Console
     public class PackOptions
     {
         /// <summary>
-        /// 资源文件目录
+        /// 资源文件目录，默认为当前目录
         /// </summary>
         [Option('d', "dir", HelpText = "资源文件目录")]
         public string? Dir { get; set; }
@@ -38,10 +38,13 @@ namespace Maintenance.Console
         public string? OutPut { get; set; }
         [Option('c', "config", HelpText = "读取配置文件，默认为当前目录下的package.mtncc文件")]
         public string? PackageConfig { get; set; }
-    }
+        //[Option('v', "version", HelpText = "补丁包的版本号")]
+        //public string? Version { get; set; } = "1.0.0";
+        //public int VersionNumber { get; set; } = 1;
 
-    public class PatchOptions
-    {
-
+        [Option("s1")]
+        public string? S1Script { get; set; }
+        [Option("s0")]
+        public string? S0Script { get; set; }
     }
 }

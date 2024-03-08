@@ -1,8 +1,21 @@
 {
   "profiles": {
-    "Maintenance.Console": {
+    "WSL": {
+      "commandName": "WSL2",
+      "distributionName": ""
+    },
+    "uninstall": {
+      "commandName": "Project",
+      "commandLineArgs": "uninstall"
+    },
+    "update": {
       "commandName": "Project",
       "commandLineArgs": "update -p D:\\walker\\demo\\MaintainceTest\\MaintainceTest_1.0.0.smm -d D:\\walker\\demo\\MaintainceTest\\1111"
+    },
+    "pack": {
+      "commandName": "Project",
+      "commandLineArgs": "pack --s0 1.txt",
+      "workingDirectory": "D:\\walker\\demo\\MaintainceTest"
     }
   }
 }

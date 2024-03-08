@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using Maintenance.Console.Domain.ScriptExecutor;
+using System.Text.Json.Serialization;
 
 namespace Maintenance.Console.Domain
 {
@@ -7,7 +8,6 @@ namespace Maintenance.Console.Domain
         public string Version { get; set; } = null!;
         public int VersionNum { get; set; }
         public string? Description { get; set; }
-
         private MaintenanceMeta() { }
         internal MaintenanceMeta(string version, int versionNum, string? description = null)
         {
@@ -27,4 +27,5 @@ namespace Maintenance.Console.Domain
     public partial class MaintenanceMetaContext : JsonSerializerContext
     {
     }
+
 }
