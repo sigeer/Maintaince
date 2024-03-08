@@ -40,8 +40,14 @@ Parser.Default.ParseArguments<UninstallationOptions, UpdationOptions, PackOption
     })
     .WithParsed<UninstallationOptions>(o =>
     {
-        UninstallationDomain.Core();
-        Message.ShowMessageWithColor(ConsoleColor.DarkGreen, "卸载成功！");
+        Console.WriteLine("即将卸载当前目录的应用，是否继续？(y/n)");
+        if (Console.ReadLine()?.Trim() == "y")
+        {
+            UninstallationDomain.Core();
+            Message.ShowMessageWithColor(ConsoleColor.DarkGreen, "卸载成功！");
+        }
+        else
+            Console.WriteLine("操作取消");
     })
     .WithParsed<PackOptions>(o =>
     {
