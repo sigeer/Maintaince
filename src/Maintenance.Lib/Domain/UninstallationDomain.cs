@@ -2,9 +2,9 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Maintenance.Console.Domain
+namespace Maintenance.Lib.Domain
 {
-    internal class UninstallationDomain
+    public class UninstallationDomain
     {
         public static void Core()
         {

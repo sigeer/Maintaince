@@ -1,29 +1,35 @@
-﻿using Maintenance.Console.Domain.ScriptExecutor;
+﻿using Maintenance.Lib.Domain.ScriptExecutor;
 using System.IO.Compression;
 
-namespace Maintenance.Console.Domain
+namespace Maintenance.Lib.Domain
 {
-    internal class UpdationDomain
+    public class UpdationDomain
     {
-        public async static Task Core(UpdationOptions o)
+        public static event EventHandler<string>? OnLogInfo;
+        public static event EventHandler<string>? OnLogError;
+        public static event EventHandler<string>? OnLogWarn;
+        public static event EventHandler<string>? OnLogSuccess;
+        public static event EventHandler<string>? OnLogCustome;
+
+        public async static Task<bool> Core(IUpdationOptions o, Action<long, long>? downloadCallback = null)
         {
             string? patchFile = o.Path;
             bool shoudDeleteTempFile = false;
             if (o.Path.StartsWith("http", StringComparison.OrdinalIgnoreCase))
             {
                 shoudDeleteTempFile = true;
-                Message.ShowMessageWithColor(ConsoleColor.Blue, $"正在从 {o.Path} 下载更新包");
-                patchFile = await DownloadAsync(o.Path);
+                OnLogInfo?.Invoke(o, $"正在从 {o.Path} 下载更新包");
+                patchFile = await DownloadAsync(o.Path, downloadCallback);
                 if (patchFile == null)
-                    return;
+                    return false;
 
-                Message.ShowMessageWithColor(ConsoleColor.Blue, $"下载完成");
+                OnLogInfo?.Invoke(o, $"下载完成");
             }
 
             if (!File.Exists(patchFile))
             {
-                Message.ShowMessageWithColor(ConsoleColor.Red, "更新包不存在");
-                return;
+                OnLogError?.Invoke(o, $"更新包不存在");
+                return false;
             }
 
             var randomFolderName = Guid.NewGuid().ToString();
@@ -34,8 +40,8 @@ namespace Maintenance.Console.Domain
             var updateDir = string.IsNullOrWhiteSpace(o.Dir) ? Environment.CurrentDirectory : o.Dir;
             if (!Directory.Exists(updateDir))
             {
-                Message.ShowMessageWithColor(ConsoleColor.Red, "更新目录不存在");
-                return;
+                OnLogError?.Invoke(o, $"更新目录不存在");
+                return false;
             }
 
             try
@@ -44,7 +50,7 @@ namespace Maintenance.Console.Domain
                 {
                     foreach (ZipArchiveEntry entry in archive.Entries)
                     {
-                        Message.ShowMessageWithColor(ConsoleColor.Blue, $"正在提取 {entry.FullName}");
+                        OnLogInfo?.Invoke(o, $"正在提取 {entry.FullName}");
                         string filePath = Path.Combine(rootTempDir, entry.FullName);
                         var fileDir = Path.GetDirectoryName(filePath);
                         if (fileDir != null && !Directory.Exists(fileDir))
@@ -53,19 +59,19 @@ namespace Maintenance.Console.Domain
                         entry.ExtractToFile(filePath, true);
                     }
                 }
-                Message.ShowMessageWithColor(ConsoleColor.Blue, $"提取完成");
+                OnLogInfo?.Invoke(o, $"提取完成");
             }
             catch (Exception ex)
             {
-                Message.ShowMessageWithColor(ConsoleColor.Red, $"提取失败：{ex.Message}");
+                OnLogError?.Invoke(o, $"提取失败：{ex.Message}");
             }
             finally
             {
-                Message.ShowMessageWithColor(ConsoleColor.Blue, $"正在清理临时文件...");
+                OnLogInfo?.Invoke(o, $"正在清理临时文件...");
                 Directory.Delete(rootTempDir, true);
                 if (shoudDeleteTempFile)
                     File.Delete(patchFile);
-                Message.ShowMessageWithColor(ConsoleColor.Blue, $"清理完成");
+                OnLogInfo?.Invoke(o, $"清理完成");
             }
 
             // 这里备份
@@ -73,7 +79,7 @@ namespace Maintenance.Console.Domain
             List<string> allFiles = new List<string>();
             if (!File.Exists(refFile))
             {
-                Message.ShowMessageWithColor(ConsoleColor.Yellow, $"补丁包文件缺失--{Constants.List}");
+                OnLogWarn?.Invoke(o, $"补丁包文件缺失--{Constants.List}");
                 allFiles = ListReader.GenerateFileList(Path.Combine(rootTempDir, Constants.ResourceDir));
             }
             else
@@ -90,28 +96,31 @@ namespace Maintenance.Console.Domain
             {
                 var script1 = Path.Combine(rootTempDir, Constants.ScriptsBeforeReplace);
                 if (File.Exists(script1))
-                    Message.ShowMessageWithColor(ConsoleColor.DarkCyan, CMDExecutor.Run(script1));
+                    OnLogCustome?.Invoke(o, CMDExecutor.Run(script1));
 
-                Message.ShowMessageWithColor(ConsoleColor.Blue, $"正在更新文件...");
+                OnLogInfo?.Invoke(o, $"正在更新文件...");
                 CopyDirectory(Path.Combine(rootTempDir, Constants.ResourceDir), updateDir);
-                Message.ShowMessageWithColor(ConsoleColor.Blue, $"更新完成");
+                OnLogInfo?.Invoke(o, $"更新完成");
 
                 var script0 = Path.Combine(rootTempDir, Constants.ScriptsFinally);
                 if (File.Exists(script0))
-                    Message.ShowMessageWithColor(ConsoleColor.DarkCyan, CMDExecutor.Run(script0));
+                    OnLogCustome?.Invoke(o, CMDExecutor.Run(script0));
+
+                return true;
             }
             catch (Exception ex)
             {
-                Message.ShowMessageWithColor(ConsoleColor.Red, $"更新失败，即将回滚。失败原因：{ex.Message}");
+                OnLogError?.Invoke(o, $"更新失败，即将回滚。失败原因：{ex.Message}");
                 CopyFileList(allFiles, bkDir, updateDir);
+                return false;
             }
             finally
             {
-                Message.ShowMessageWithColor(ConsoleColor.Blue, $"正在清理临时文件...");
+                OnLogInfo?.Invoke(o, $"正在清理临时文件...");
                 Directory.Delete(rootTempDir, true);
                 if (shoudDeleteTempFile)
                     File.Delete(patchFile);
-                Message.ShowMessageWithColor(ConsoleColor.Blue, $"清理完成");
+                OnLogInfo?.Invoke(o, $"清理完成");
             }
         }
 
@@ -151,27 +160,7 @@ namespace Maintenance.Console.Domain
             }
         }
 
-        public static async Task<string?> DownloadPatcherAsync(string url)
-        {
-            try
-            {
-                using (var httpClient = new HttpClient())
-                {
-                    var res = await httpClient.GetAsync(url);
-                    var fileBytes = await res.Content.ReadAsByteArrayAsync();
-                    var filePath = Path.GetTempFileName();
-                    File.WriteAllBytes(filePath, fileBytes);
-                    return filePath;
-                }
-            }
-            catch (Exception ex)
-            {
-                Message.ShowMessageWithColor(ConsoleColor.Red, $"下载失败：{ex.Message}");
-                return null;
-            }
-        }
-
-        public static async Task<string?> DownloadAsync(string url)
+        public static async Task<string?> DownloadAsync(string url, Action<long, long>? downloadCallback = null)
         {
             try
             {
@@ -196,7 +185,7 @@ namespace Maintenance.Console.Domain
                                 downloadedBytes += bytesRead;
                                 if (totalBytes != -1)
                                 {
-                                    PrintProgress(downloadedBytes, totalBytes);
+                                    downloadCallback?.Invoke(totalBytes, downloadedBytes);
                                 }
                             }
                             return filePath;
@@ -206,18 +195,9 @@ namespace Maintenance.Console.Domain
             }
             catch (Exception ex)
             {
-                Message.ShowMessageWithColor(ConsoleColor.Red, $"下载失败：{ex.Message}");
+                OnLogError?.Invoke(ex, $"下载失败：{ex.Message}");
                 return null;
             }
-        }
-
-        static void PrintProgress(long current, long total)
-        {
-            System.Console.SetCursorPosition(0, System.Console.CursorTop);
-            System.Console.Write($"已下载: {current} / {total} bytes ({(current * 100) / total}%)");
-
-            // // \r也可以
-            // System.Console.Write($"\rDownloaded: {current} / {total} bytes ({(current * 100) / total}%)");
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Maintenance.Console.Domain
+namespace Maintenance.Lib.Domain
 {
     public class MaintenanceMeta
     {
@@ -9,7 +9,7 @@ namespace Maintenance.Console.Domain
         public int VersionNum { get; set; }
         public string? Description { get; set; }
         private MaintenanceMeta() { }
-        internal MaintenanceMeta(string version, int versionNum, string? description = null)
+        public MaintenanceMeta(string version, int versionNum, string? description = null)
         {
             Version = version;
             VersionNum = versionNum;

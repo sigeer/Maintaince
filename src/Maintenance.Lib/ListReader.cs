@@ -1,4 +1,4 @@
-﻿namespace Maintenance.Console
+﻿namespace Maintenance.Lib
 {
     internal class ListReader
     {

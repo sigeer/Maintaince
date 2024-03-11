@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Maintenance.Console.Domain.ScriptExecutor
+namespace Maintenance.Lib.Domain.ScriptExecutor
 {
     internal class CMDExecutor
     {

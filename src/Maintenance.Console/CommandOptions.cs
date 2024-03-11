@@ -1,9 +1,10 @@
 ﻿using CommandLine;
+using Maintenance.Lib;
 
 namespace Maintenance.Console
 {
     [Verb("update", HelpText = "更新应用")]
-    public class UpdationOptions
+    public class UpdationOptions: IUpdationOptions
     {
         [Option('p', "path", HelpText = "资源路径，可支持HTTP资源", Required = true)]
         public string Path { get; set; } = null!;
@@ -14,7 +15,7 @@ namespace Maintenance.Console
         public string? Dir { get; set; }
     }
     [Verb("uninstall", HelpText = "卸载当前目录的应用")]
-    public class UninstallationOptions
+    public class UninstallationOptions: IUninstallationOptions
     {
 
     }
@@ -22,7 +23,7 @@ namespace Maintenance.Console
     /// mtnc pack --dir=""
     /// </summary>
     [Verb("pack", HelpText = "生成更新用资源包")]
-    public class PackOptions
+    public class PackOptions : IPackOptions
     {
         /// <summary>
         /// 资源文件目录，默认为当前目录

@@ -14,6 +14,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solutions", "solutions", "{
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maintenance.Win", "src\Maintenance.Win\Maintenance.Win.csproj", "{E3803BD1-F614-43E9-801E-85ABD789AE7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maintenance.Lib", "src\Maintenance.Lib\Maintenance.Lib.csproj", "{CD96DDBC-7E61-4400-A15D-E88C7655B422}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,12 +28,22 @@ Global
 		{524E0CFB-0E94-446A-8C69-9DF6851BEACB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{524E0CFB-0E94-446A-8C69-9DF6851BEACB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{524E0CFB-0E94-446A-8C69-9DF6851BEACB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3803BD1-F614-43E9-801E-85ABD789AE7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3803BD1-F614-43E9-801E-85ABD789AE7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3803BD1-F614-43E9-801E-85ABD789AE7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3803BD1-F614-43E9-801E-85ABD789AE7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD96DDBC-7E61-4400-A15D-E88C7655B422}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD96DDBC-7E61-4400-A15D-E88C7655B422}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD96DDBC-7E61-4400-A15D-E88C7655B422}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD96DDBC-7E61-4400-A15D-E88C7655B422}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{524E0CFB-0E94-446A-8C69-9DF6851BEACB} = {2C8C028A-B87A-4DB1-919E-A2CE904773D1}
+		{E3803BD1-F614-43E9-801E-85ABD789AE7A} = {2C8C028A-B87A-4DB1-919E-A2CE904773D1}
+		{CD96DDBC-7E61-4400-A15D-E88C7655B422} = {2C8C028A-B87A-4DB1-919E-A2CE904773D1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A7D9A8E2-6A78-4397-B8B6-A6035A6CFE04}

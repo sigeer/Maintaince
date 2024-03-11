@@ -1,5 +1,6 @@
 ﻿using CommandLine;
-using Maintenance.Console.Domain;
+using Maintenance.Lib.Domain;
+using Maintenance.Lib;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
@@ -23,12 +24,30 @@ public class Program
             return;
         }
 
+        PackDomain.OnLogError += (obj, e) => Message.ShowMessageWithColor(ConsoleColor.Red, e);
+        PackDomain.OnLogInfo += (obj, e) => Message.ShowMessageWithColor(ConsoleColor.Blue, e);
+        PackDomain.OnLogSuccess += (obj, e) => Message.ShowMessageWithColor(ConsoleColor.DarkGreen, e);
+        PackDomain.OnLogWarn += (obj, e) => Message.ShowMessageWithColor(ConsoleColor.Yellow, e);
+
+        UpdationDomain.OnLogError += (obj, e) => Message.ShowMessageWithColor(ConsoleColor.Red, e);
+        UpdationDomain.OnLogInfo += (obj, e) => Message.ShowMessageWithColor(ConsoleColor.Blue, e);
+        UpdationDomain.OnLogSuccess += (obj, e) => Message.ShowMessageWithColor(ConsoleColor.DarkGreen, e);
+        UpdationDomain.OnLogWarn += (obj, e) => Message.ShowMessageWithColor(ConsoleColor.Yellow, e);
+
+        UpdationDomain.OnLogCustome += (obj, e) => Message.ShowMessageWithColor(ConsoleColor.DarkYellow, e);
+
         var currentExeFullName = mainModule.FileName;
         Parser.Default.ParseArguments<UninstallationOptions, UpdationOptions, PackOptions>(args)
             .WithParsed<UpdationOptions>(async o =>
             {
-                await UpdationDomain.Core(o);
-                Message.ShowMessageWithColor(ConsoleColor.DarkGreen, "更新成功！");
+                var updateResult = await UpdationDomain.Core(o, (total, current) =>
+                {
+                    Message.PrintProgress(total, current);
+                });
+                if (updateResult)
+                    Message.ShowMessageWithColor(ConsoleColor.DarkGreen, "更新成功");
+                else
+                    Message.ShowMessageWithColor(ConsoleColor.Red, "更新失败");
             })
             .WithParsed<UninstallationOptions>(o =>
             {
@@ -36,15 +55,17 @@ public class Program
                 if (System.Console.ReadLine()?.Trim() == "y")
                 {
                     UninstallationDomain.Core();
-                    Message.ShowMessageWithColor(ConsoleColor.DarkGreen, "卸载成功！");
+                    Message.ShowMessageWithColor(ConsoleColor.DarkGreen, "卸载成功");
                 }
                 else
                     System.Console.WriteLine("操作取消");
             })
             .WithParsed<PackOptions>(o =>
             {
-                PackDomain.Generate(o, currentExeFullName);
-                Message.ShowMessageWithColor(ConsoleColor.DarkGreen, "打包成功！");
+                if (PackDomain.Generate(o, currentExeFullName))
+                    Message.ShowMessageWithColor(ConsoleColor.DarkGreen, "打包成功");
+                else
+                    Message.ShowMessageWithColor(ConsoleColor.Red, "打包失败");
             });
     }
 }

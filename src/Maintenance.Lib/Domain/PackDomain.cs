@@ -1,11 +1,16 @@
-﻿using System.IO.Compression;
+﻿using System.Diagnostics;
+using System.IO.Compression;
 using System.Text.Json;
 
-namespace Maintenance.Console.Domain
+namespace Maintenance.Lib.Domain
 {
-    internal class PackDomain
+    public class PackDomain
     {
-        public static void Generate(PackOptions o, params string[] excepts)
+        public static event EventHandler<string>? OnLogInfo;
+        public static event EventHandler<string>? OnLogError;
+        public static event EventHandler<string>? OnLogSuccess;
+        public static event EventHandler<string>? OnLogWarn;
+        public static bool Generate(IPackOptions o, params string[] excepts)
         {
             if (string.IsNullOrWhiteSpace(o.Dir))
                 o.Dir = Environment.CurrentDirectory;
@@ -14,9 +19,17 @@ namespace Maintenance.Console.Domain
                 o.PackageConfig = Path.Combine(o.Dir, Constants.MetaFileName);
 
             var meta = MaintenanceMeta.ReadPackageMeta(o.PackageConfig);
+            return Generate(o, meta, excepts);
+        }
+
+
+        public static bool Generate(IPackOptions o, MaintenanceMeta meta, params string[] excepts)
+        {
+            if (string.IsNullOrWhiteSpace(o.Dir))
+                o.Dir = Environment.CurrentDirectory;
 
             if (string.IsNullOrEmpty(o.OutPut))
-                o.OutPut = $"{Path.GetFileNameWithoutExtension(o.Dir)}_{meta.Version}.smm";
+                o.OutPut = $"{Path.GetFileNameWithoutExtension(o.Dir)}_{meta.Version}{Constants.PACKAGEEXTENSION}";
 
             if (!Path.IsPathRooted(o.OutPut))
                 o.OutPut = Path.Combine(o.Dir, o.OutPut);
@@ -45,7 +58,7 @@ namespace Maintenance.Console.Domain
                     if (!excepts.Contains(filePath))
                     {
                         var path = Path.GetRelativePath(o.Dir, filePath);
-                        Message.ShowMessageWithColor(ConsoleColor.Blue, $"正在打包 {path}");
+                        OnLogInfo?.Invoke(o, $"正在打包 {path}");
                         archive.CreateEntryFromFile(filePath, Path.Combine(Constants.ResourceDir, path));
                     }
                 }
@@ -53,9 +66,9 @@ namespace Maintenance.Console.Domain
 
             File.Delete(tempMetaFile);
             File.Delete(tempListFile);
+
+            return true;
         }
-
-
     }
 
 }
