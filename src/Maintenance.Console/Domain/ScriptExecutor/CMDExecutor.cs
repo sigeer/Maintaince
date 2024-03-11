@@ -15,6 +15,7 @@ namespace Maintenance.Console.Domain.ScriptExecutor
 
             process.Start();
 
+            // 使用： %WORKDIR%
             process.StandardInput.WriteLine($"set WORKDIR={Environment.CurrentDirectory}");
             process.StandardInput.Flush();
 

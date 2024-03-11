@@ -5,10 +5,8 @@ namespace Maintenance.Console
     [Verb("update", HelpText = "更新应用")]
     public class UpdationOptions
     {
-        [Option('u', "url", HelpText = "远程资源")]
-        public string? Url { get; set; }
-        [Option('p', "path", HelpText = "资源压缩包")]
-        public string? Path { get; set; }
+        [Option('p', "path", HelpText = "资源压缩包，可支持HTTP资源", Required = true)]
+        public string Path { get; set; } = null!;
         /// <summary>
         /// 待更新文件目录，默认为当前工作目录
         /// </summary>

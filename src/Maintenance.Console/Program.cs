@@ -27,26 +27,8 @@ public class Program
         Parser.Default.ParseArguments<UninstallationOptions, UpdationOptions, PackOptions>(args)
             .WithParsed<UpdationOptions>(async o =>
             {
-                if (string.IsNullOrWhiteSpace(o.Url) && string.IsNullOrWhiteSpace(o.Path))
-                {
-                    System.Console.WriteLine("至少需要传入一个url或者补丁文件路径path");
-                    return;
-                }
-
-                string patchFile = string.Empty;
-                bool shoudDeleteTempFile = false;
-                if (!string.IsNullOrWhiteSpace(o.Url))
-                {
-                    patchFile = await UpdationDomain.DownloadPatcherAsync(o.Url);
-                    shoudDeleteTempFile = true;
-                }
-                else
-                    patchFile = o.Path!;
-
-                UpdationDomain.Core(patchFile, string.IsNullOrWhiteSpace(o.Dir) ? Environment.CurrentDirectory : o.Dir);
+                await UpdationDomain.Core(o);
                 Message.ShowMessageWithColor(ConsoleColor.DarkGreen, "更新成功！");
-                if (shoudDeleteTempFile)
-                    File.Delete(patchFile);
             })
             .WithParsed<UninstallationOptions>(o =>
             {
