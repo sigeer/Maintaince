@@ -5,7 +5,7 @@ namespace Maintenance.Console
     [Verb("update", HelpText = "更新应用")]
     public class UpdationOptions
     {
-        [Option('p', "path", HelpText = "资源压缩包，可支持HTTP资源", Required = true)]
+        [Option('p', "path", HelpText = "资源路径，可支持HTTP资源", Required = true)]
         public string Path { get; set; } = null!;
         /// <summary>
         /// 待更新文件目录，默认为当前工作目录
