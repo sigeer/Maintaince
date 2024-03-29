@@ -30,14 +30,18 @@
         {
             TabControl_Pack = new TabControl();
             tabPage1 = new TabPage();
+            Btn_SetScript0 = new Button();
+            label3 = new Label();
+            Label_S1 = new Label();
+            Btn_SetScript1 = new Button();
+            label2 = new Label();
+            Text_VersionNumber = new TextBox();
+            Text_Version = new TextBox();
+            label1 = new Label();
             Btn_Pack_Submit = new Button();
             Text_Dir = new TextBox();
             Btn_SelectFolder = new Button();
             tabPage2 = new TabPage();
-            label1 = new Label();
-            Text_Version = new TextBox();
-            Text_VersionNumber = new TextBox();
-            label2 = new Label();
             TabControl_Pack.SuspendLayout();
             tabPage1.SuspendLayout();
             SuspendLayout();
@@ -54,6 +58,10 @@
             // 
             // tabPage1
             // 
+            tabPage1.Controls.Add(Btn_SetScript0);
+            tabPage1.Controls.Add(label3);
+            tabPage1.Controls.Add(Label_S1);
+            tabPage1.Controls.Add(Btn_SetScript1);
             tabPage1.Controls.Add(label2);
             tabPage1.Controls.Add(Text_VersionNumber);
             tabPage1.Controls.Add(Text_Version);
@@ -66,8 +74,78 @@
             tabPage1.Padding = new Padding(3);
             tabPage1.Size = new Size(587, 281);
             tabPage1.TabIndex = 0;
-            tabPage1.Text = "tabPage1";
+            tabPage1.Text = "打包";
             tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // Btn_SetScript0
+            // 
+            Btn_SetScript0.Location = new Point(87, 155);
+            Btn_SetScript0.Name = "Btn_SetScript0";
+            Btn_SetScript0.Size = new Size(156, 23);
+            Btn_SetScript0.TabIndex = 10;
+            Btn_SetScript0.Text = "设置完成脚本";
+            Btn_SetScript0.UseVisualStyleBackColor = true;
+            Btn_SetScript0.Click += Btn_SetScript0_Click;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(13, 158);
+            label3.Name = "label3";
+            label3.Size = new Size(70, 17);
+            label3.TabIndex = 9;
+            label3.Text = "设置脚本S2";
+            // 
+            // Label_S1
+            // 
+            Label_S1.AutoSize = true;
+            Label_S1.Location = new Point(11, 120);
+            Label_S1.Name = "Label_S1";
+            Label_S1.Size = new Size(70, 17);
+            Label_S1.TabIndex = 8;
+            Label_S1.Text = "设置脚本S1";
+            // 
+            // Btn_SetScript1
+            // 
+            Btn_SetScript1.Location = new Point(87, 117);
+            Btn_SetScript1.Name = "Btn_SetScript1";
+            Btn_SetScript1.Size = new Size(156, 23);
+            Btn_SetScript1.TabIndex = 7;
+            Btn_SetScript1.Text = "设置预处理脚本";
+            Btn_SetScript1.UseVisualStyleBackColor = true;
+            Btn_SetScript1.Click += Btn_SetScript1_Click;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(13, 79);
+            label2.Name = "label2";
+            label2.Size = new Size(68, 17);
+            label2.TabIndex = 6;
+            label2.Text = "版本号序列";
+            // 
+            // Text_VersionNumber
+            // 
+            Text_VersionNumber.Location = new Point(87, 79);
+            Text_VersionNumber.Name = "Text_VersionNumber";
+            Text_VersionNumber.Size = new Size(156, 23);
+            Text_VersionNumber.TabIndex = 5;
+            // 
+            // Text_Version
+            // 
+            Text_Version.Location = new Point(87, 41);
+            Text_Version.Name = "Text_Version";
+            Text_Version.Size = new Size(156, 23);
+            Text_Version.TabIndex = 4;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(37, 44);
+            label1.Name = "label1";
+            label1.Size = new Size(44, 17);
+            label1.TabIndex = 3;
+            label1.Text = "版本号";
             // 
             // Btn_Pack_Submit
             // 
@@ -106,43 +184,11 @@
             tabPage2.Text = "tabPage2";
             tabPage2.UseVisualStyleBackColor = true;
             // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(37, 44);
-            label1.Name = "label1";
-            label1.Size = new Size(44, 17);
-            label1.TabIndex = 3;
-            label1.Text = "版本号";
-            // 
-            // Text_Version
-            // 
-            Text_Version.Location = new Point(87, 41);
-            Text_Version.Name = "Text_Version";
-            Text_Version.Size = new Size(156, 23);
-            Text_Version.TabIndex = 4;
-            // 
-            // Text_VersionNumber
-            // 
-            Text_VersionNumber.Location = new Point(87, 79);
-            Text_VersionNumber.Name = "Text_VersionNumber";
-            Text_VersionNumber.Size = new Size(156, 23);
-            Text_VersionNumber.TabIndex = 5;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(13, 79);
-            label2.Name = "label2";
-            label2.Size = new Size(68, 17);
-            label2.TabIndex = 6;
-            label2.Text = "版本号序列";
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(620, 450);
+            ClientSize = new Size(620, 323);
             Controls.Add(TabControl_Pack);
             Name = "MainForm";
             Text = "Form1";
@@ -164,5 +210,9 @@
         private Label label2;
         private TextBox Text_VersionNumber;
         private TextBox Text_Version;
+        private Label Label_S1;
+        private Button Btn_SetScript1;
+        private Button Btn_SetScript0;
+        private Label label3;
     }
 }
