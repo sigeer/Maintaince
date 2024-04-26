@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.IO.Compression;
+﻿using System.IO.Compression;
 using System.Text.Json;
 
 namespace Maintenance.Lib.Domain

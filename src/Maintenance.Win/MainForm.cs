@@ -8,6 +8,8 @@ namespace Maintenance.Win
         public MainForm()
         {
             InitializeComponent();
+
+            TabPage_Pack.AllowDrop = true;
         }
 
         private void Btn_SelectFolder_Click(object sender, EventArgs e)
@@ -108,5 +110,27 @@ namespace Maintenance.Win
             if (!string.IsNullOrWhiteSpace(path) && File.Exists(path))
                 File.Delete(path);
         }
+
+        #region 拖拽目录
+        private void tabPage1_DragDrop(object sender, DragEventArgs e)
+        {
+            var dragData = e.Data?.GetData(DataFormats.FileDrop);
+            // 获取拖放的文件路径数组
+
+            string[]? files = dragData == null ? null : (string[])dragData;
+
+            if (files?.Length > 0 && Directory.Exists(files[0]))
+                Text_Dir.Text = files[0];
+        }
+
+        private void tabPage1_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data?.GetDataPresent(DataFormats.FileDrop) != null)
+            {
+                // 允许拖放操作
+                e.Effect = DragDropEffects.Copy;
+            }
+        }
+        #endregion 
     }
 }

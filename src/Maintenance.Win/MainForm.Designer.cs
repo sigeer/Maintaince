@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             TabControl_Pack = new TabControl();
-            tabPage1 = new TabPage();
+            TabPage_Pack = new TabPage();
             Btn_SetScript0 = new Button();
             label3 = new Label();
             Label_S1 = new Label();
@@ -41,41 +41,41 @@
             Btn_Pack_Submit = new Button();
             Text_Dir = new TextBox();
             Btn_SelectFolder = new Button();
-            tabPage2 = new TabPage();
             TabControl_Pack.SuspendLayout();
-            tabPage1.SuspendLayout();
+            TabPage_Pack.SuspendLayout();
             SuspendLayout();
             // 
             // TabControl_Pack
             // 
-            TabControl_Pack.Controls.Add(tabPage1);
-            TabControl_Pack.Controls.Add(tabPage2);
+            TabControl_Pack.Controls.Add(TabPage_Pack);
             TabControl_Pack.Location = new Point(13, 6);
             TabControl_Pack.Name = "TabControl_Pack";
             TabControl_Pack.SelectedIndex = 0;
             TabControl_Pack.Size = new Size(595, 311);
             TabControl_Pack.TabIndex = 0;
             // 
-            // tabPage1
+            // TabPage_Pack
             // 
-            tabPage1.Controls.Add(Btn_SetScript0);
-            tabPage1.Controls.Add(label3);
-            tabPage1.Controls.Add(Label_S1);
-            tabPage1.Controls.Add(Btn_SetScript1);
-            tabPage1.Controls.Add(label2);
-            tabPage1.Controls.Add(Text_VersionNumber);
-            tabPage1.Controls.Add(Text_Version);
-            tabPage1.Controls.Add(label1);
-            tabPage1.Controls.Add(Btn_Pack_Submit);
-            tabPage1.Controls.Add(Text_Dir);
-            tabPage1.Controls.Add(Btn_SelectFolder);
-            tabPage1.Location = new Point(4, 26);
-            tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(587, 281);
-            tabPage1.TabIndex = 0;
-            tabPage1.Text = "打包";
-            tabPage1.UseVisualStyleBackColor = true;
+            TabPage_Pack.Controls.Add(Btn_SetScript0);
+            TabPage_Pack.Controls.Add(label3);
+            TabPage_Pack.Controls.Add(Label_S1);
+            TabPage_Pack.Controls.Add(Btn_SetScript1);
+            TabPage_Pack.Controls.Add(label2);
+            TabPage_Pack.Controls.Add(Text_VersionNumber);
+            TabPage_Pack.Controls.Add(Text_Version);
+            TabPage_Pack.Controls.Add(label1);
+            TabPage_Pack.Controls.Add(Btn_Pack_Submit);
+            TabPage_Pack.Controls.Add(Text_Dir);
+            TabPage_Pack.Controls.Add(Btn_SelectFolder);
+            TabPage_Pack.Location = new Point(4, 26);
+            TabPage_Pack.Name = "TabPage_Pack";
+            TabPage_Pack.Padding = new Padding(3);
+            TabPage_Pack.Size = new Size(587, 281);
+            TabPage_Pack.TabIndex = 0;
+            TabPage_Pack.Text = "打包";
+            TabPage_Pack.UseVisualStyleBackColor = true;
+            TabPage_Pack.DragDrop += tabPage1_DragDrop;
+            TabPage_Pack.DragEnter += tabPage1_DragEnter;
             // 
             // Btn_SetScript0
             // 
@@ -174,16 +174,6 @@
             Btn_SelectFolder.UseVisualStyleBackColor = true;
             Btn_SelectFolder.Click += Btn_SelectFolder_Click;
             // 
-            // tabPage2
-            // 
-            tabPage2.Location = new Point(4, 26);
-            tabPage2.Name = "tabPage2";
-            tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(587, 281);
-            tabPage2.TabIndex = 1;
-            tabPage2.Text = "tabPage2";
-            tabPage2.UseVisualStyleBackColor = true;
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
@@ -191,20 +181,19 @@
             ClientSize = new Size(620, 323);
             Controls.Add(TabControl_Pack);
             Name = "MainForm";
-            Text = "Form1";
+            Text = "工具";
             TabControl_Pack.ResumeLayout(false);
-            tabPage1.ResumeLayout(false);
-            tabPage1.PerformLayout();
+            TabPage_Pack.ResumeLayout(false);
+            TabPage_Pack.PerformLayout();
             ResumeLayout(false);
         }
 
         #endregion
 
         private TabControl TabControl_Pack;
-        private TabPage tabPage1;
+        private TabPage TabPage_Pack;
         private TextBox Text_Dir;
         private Button Btn_SelectFolder;
-        private TabPage tabPage2;
         private Button Btn_Pack_Submit;
         private Label label1;
         private Label label2;
