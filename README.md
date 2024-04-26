@@ -78,5 +78,4 @@ _s0.bat,_s1.bat ÔòÊÇ²»Í¬Ê±¼äÖ´ÐÐµÄ½Å±¾£¬Ë³ÐòÊÇ1, 0£¨0ËäÈ»ÊÇ×îºóÖ´ÐÐ£¬µ«ÓÉÓÚ±È½Ï³
 
 - [x] ¸üÐÂ±¸·Ý£¬»Ø¹ö
 - [x] ¸üÐÂÊ±£¬¶¨ÖÆµÄ´¦Àí£¬±ÈÈç¶îÍâÒªÖ´ÐÐµÄÃüÁî£¬½Å±¾...(ÇåÀí×¢²á±í£¬Í£Ö¹Ó¦ÓÃÔÙ¸üÐÂ...)
-- [ ] ÒÆ³ýpowershell½Å±¾µ÷ÓÃÊ±µÄÆäËûÊä³ö
 - [ ] powershellµÄÒÀÀµ£¬¸ù¾Ý²»Í¬ÏµÍ³Ê¹ÓÃ²»Í¬°æ±¾£ºwindowsÊ¹ÓÃprocessµ÷ÓÃ£¬·ÇwindowsÊ¹ÓÃpowershell.sdkµ÷ÓÃ
