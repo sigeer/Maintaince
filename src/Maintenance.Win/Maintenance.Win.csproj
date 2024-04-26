@@ -12,4 +12,14 @@
     <ProjectReference Include="..\Maintenance.Lib\Maintenance.Lib.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<PackageReference Include="ICSharpCode.TextEditor" Version="3.2.1.6466" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="HighLighting\PowerShell.xshd">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>

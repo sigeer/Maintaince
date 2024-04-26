@@ -64,15 +64,14 @@ namespace Maintenance.Lib.Domain
             catch (Exception ex)
             {
                 OnLogError?.Invoke(o, $"提取失败：{ex.Message}");
-            }
-            finally
-            {
+
                 OnLogInfo?.Invoke(o, $"正在清理临时文件...");
                 Directory.Delete(rootTempDir, true);
                 if (shoudDeleteTempFile)
                     File.Delete(patchFile);
                 OnLogInfo?.Invoke(o, $"清理完成");
             }
+
 
             // 这里备份
             var refFile = Path.Combine(rootTempDir, Constants.List);
@@ -96,7 +95,7 @@ namespace Maintenance.Lib.Domain
             {
                 var script1 = Path.Combine(rootTempDir, Constants.ScriptsBeforeReplace);
                 if (File.Exists(script1))
-                    OnLogCustome?.Invoke(o, CMDExecutor.Run(script1));
+                    Executor.RunPowerShell(script1);
 
                 OnLogInfo?.Invoke(o, $"正在更新文件...");
                 CopyDirectory(Path.Combine(rootTempDir, Constants.ResourceDir), updateDir);
@@ -104,7 +103,7 @@ namespace Maintenance.Lib.Domain
 
                 var script0 = Path.Combine(rootTempDir, Constants.ScriptsFinally);
                 if (File.Exists(script0))
-                    OnLogCustome?.Invoke(o, CMDExecutor.Run(script0));
+                    Executor.RunPowerShell(script0);
 
                 return true;
             }

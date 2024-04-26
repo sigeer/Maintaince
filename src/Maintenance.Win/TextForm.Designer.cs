@@ -28,18 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            Text_Content = new TextBox();
             Btn_Save = new Button();
             Btn_Cancel = new Button();
+            Text_Container = new Panel();
             SuspendLayout();
-            // 
-            // Text_Content
-            // 
-            Text_Content.Location = new Point(0, 0);
-            Text_Content.Multiline = true;
-            Text_Content.Name = "Text_Content";
-            Text_Content.Size = new Size(500, 420);
-            Text_Content.TabIndex = 0;
             // 
             // Btn_Save
             // 
@@ -61,24 +53,29 @@
             Btn_Cancel.UseVisualStyleBackColor = true;
             Btn_Cancel.Click += Btn_Cancel_Click;
             // 
+            // Text_Container
+            // 
+            Text_Container.Location = new Point(0, 0);
+            Text_Container.Name = "Text_Container";
+            Text_Container.Size = new Size(500, 420);
+            Text_Container.TabIndex = 3;
+            // 
             // TextForm
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(500, 454);
+            Controls.Add(Text_Container);
             Controls.Add(Btn_Cancel);
             Controls.Add(Btn_Save);
-            Controls.Add(Text_Content);
             Name = "TextForm";
             Text = "TextForm";
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
-
-        private TextBox Text_Content;
         private Button Btn_Save;
         private Button Btn_Cancel;
+        private Panel Text_Container;
     }
 }

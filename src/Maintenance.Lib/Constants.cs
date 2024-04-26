@@ -8,8 +8,8 @@
         public const string List = "list";
 
         public const string ResourceDir = "_d";
-        public const string ScriptsBeforeReplace = "_s1.bat";
-        public const string ScriptsFinally = "_s0.bat";
+        public const string ScriptsBeforeReplace = "_s1.ps1";
+        public const string ScriptsFinally = "_s0.ps1";
 
         public const string BackupDir = "_bk";
     }

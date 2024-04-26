@@ -10,7 +10,7 @@
     },
     "update": {
       "commandName": "Project",
-      "commandLineArgs": "update -p ../MaintainceTest_1.0.0.smm",
+      "commandLineArgs": "update -d D:\\walker\\demo\\MaintainceTest\\111 -p D:\\walker\\demo\\MaintainceTest\\222_1.0.0.smm",
       "workingDirectory": "D:\\walker\\demo\\MaintainceTest\\111"
     },
     "pack": {
