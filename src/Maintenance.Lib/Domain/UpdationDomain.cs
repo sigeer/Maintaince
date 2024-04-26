@@ -95,7 +95,7 @@ namespace Maintenance.Lib.Domain
             {
                 var script1 = Path.Combine(rootTempDir, Constants.ScriptsBeforeReplace);
                 if (File.Exists(script1))
-                    Executor.RunPowerShell(script1);
+                    OnLogCustome?.Invoke(o, Executor.Run(script1));
 
                 OnLogInfo?.Invoke(o, $"正在更新文件...");
                 CopyDirectory(Path.Combine(rootTempDir, Constants.ResourceDir), updateDir);
@@ -103,7 +103,7 @@ namespace Maintenance.Lib.Domain
 
                 var script0 = Path.Combine(rootTempDir, Constants.ScriptsFinally);
                 if (File.Exists(script0))
-                    Executor.RunPowerShell(script0);
+                    OnLogCustome?.Invoke(o, Executor.Run(script0));
 
                 return true;
             }
@@ -116,7 +116,9 @@ namespace Maintenance.Lib.Domain
             finally
             {
                 OnLogInfo?.Invoke(o, $"正在清理临时文件...");
-                Directory.Delete(rootTempDir, true);
+                if (Directory.Exists(rootTempDir))
+                    Directory.Delete(rootTempDir, true);
+
                 if (shoudDeleteTempFile)
                     File.Delete(patchFile);
                 OnLogInfo?.Invoke(o, $"清理完成");
