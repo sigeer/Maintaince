@@ -1,3 +1,5 @@
+using Serilog;
+
 namespace Maintenance.Win
 {
     internal static class Program
@@ -8,6 +10,10 @@ namespace Maintenance.Win
         [STAThread]
         static void Main()
         {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Sink(LogSinks.Sink)
+                .CreateLogger();
+
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
