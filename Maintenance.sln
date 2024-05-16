@@ -11,12 +11,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{22B9C2FF-2
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solutions", "solutions", "{64F846F5-475C-4644-A8B2-812B2A85EC68}"
 	ProjectSection(SolutionItems) = preProject
-		README.md = README.md
+		README.MD = README.MD
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maintenance.Win", "src\Maintenance.Win\Maintenance.Win.csproj", "{E3803BD1-F614-43E9-801E-85ABD789AE7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maintenance.Win", "src\Maintenance.Win\Maintenance.Win.csproj", "{E3803BD1-F614-43E9-801E-85ABD789AE7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maintenance.Lib", "src\Maintenance.Lib\Maintenance.Lib.csproj", "{CD96DDBC-7E61-4400-A15D-E88C7655B422}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maintenance.Lib", "src\Maintenance.Lib\Maintenance.Lib.csproj", "{CD96DDBC-7E61-4400-A15D-E88C7655B422}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
