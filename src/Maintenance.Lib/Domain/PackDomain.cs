@@ -62,7 +62,7 @@ namespace Maintenance.Lib.Domain
 
             File.Delete(tempMetaFile);
             File.Delete(tempListFile);
-
+            Log.Logger.Information("打包成功");
             return true;
         }
     }
