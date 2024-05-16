@@ -1,16 +1,11 @@
 ﻿using Maintenance.Lib.Domain.ScriptExecutor;
+using Serilog;
 using System.IO.Compression;
 
 namespace Maintenance.Lib.Domain
 {
     public class UpdationDomain
     {
-        public static event EventHandler<string>? OnLogInfo;
-        public static event EventHandler<string>? OnLogError;
-        public static event EventHandler<string>? OnLogWarn;
-        public static event EventHandler<string>? OnLogSuccess;
-        public static event EventHandler<string>? OnLogCustome;
-
         public async static Task<bool> Core(IUpdationOptions o, Action<long, long>? downloadCallback = null)
         {
             string? patchFile = o.Path;
@@ -18,17 +13,17 @@ namespace Maintenance.Lib.Domain
             if (o.Path.StartsWith("http", StringComparison.OrdinalIgnoreCase))
             {
                 shoudDeleteTempFile = true;
-                OnLogInfo?.Invoke(o, $"正在从 {o.Path} 下载更新包");
+                Log.Logger.Information($"正在从 {o.Path} 下载更新包");
                 patchFile = await DownloadAsync(o.Path, downloadCallback);
                 if (patchFile == null)
                     return false;
 
-                OnLogInfo?.Invoke(o, $"下载完成");
+                Log.Logger.Information($"下载完成");
             }
 
             if (!File.Exists(patchFile))
             {
-                OnLogError?.Invoke(o, $"更新包不存在");
+                Log.Logger.Error($"更新包不存在");
                 return false;
             }
 
@@ -36,11 +31,12 @@ namespace Maintenance.Lib.Domain
             var rootTempDir = Path.Combine(Path.GetTempPath(), randomFolderName);
             if (!Directory.Exists(rootTempDir))
                 Directory.CreateDirectory(rootTempDir);
+            Log.Logger.Debug($"临时目录：{rootTempDir}");
 
             var updateDir = string.IsNullOrWhiteSpace(o.Dir) ? Environment.CurrentDirectory : o.Dir;
             if (!Directory.Exists(updateDir))
             {
-                OnLogError?.Invoke(o, $"更新目录不存在");
+                Log.Logger.Error( $"更新目录不存在");
                 return false;
             }
 
@@ -50,7 +46,7 @@ namespace Maintenance.Lib.Domain
                 {
                     foreach (ZipArchiveEntry entry in archive.Entries)
                     {
-                        OnLogInfo?.Invoke(o, $"正在提取 {entry.FullName}");
+                        Log.Logger.Information($"正在提取 {entry.FullName}");
                         string filePath = Path.Combine(rootTempDir, entry.FullName);
                         var fileDir = Path.GetDirectoryName(filePath);
                         if (fileDir != null && !Directory.Exists(fileDir))
@@ -59,17 +55,16 @@ namespace Maintenance.Lib.Domain
                         entry.ExtractToFile(filePath, true);
                     }
                 }
-                OnLogInfo?.Invoke(o, $"提取完成");
+                Log.Logger.Information($"提取完成");
             }
             catch (Exception ex)
             {
-                OnLogError?.Invoke(o, $"提取失败：{ex.Message}");
-
-                OnLogInfo?.Invoke(o, $"正在清理临时文件...");
+                Log.Logger.Error( $"提取失败：{ex.Message}");
+                Log.Logger.Information($"正在清理临时文件...");
                 Directory.Delete(rootTempDir, true);
                 if (shoudDeleteTempFile)
                     File.Delete(patchFile);
-                OnLogInfo?.Invoke(o, $"清理完成");
+                Log.Logger.Information($"清理完成");
             }
 
 
@@ -78,7 +73,7 @@ namespace Maintenance.Lib.Domain
             List<string> allFiles = new List<string>();
             if (!File.Exists(refFile))
             {
-                OnLogWarn?.Invoke(o, $"补丁包文件缺失--{Constants.List}");
+                Log.Logger.Warning($"补丁包文件缺失--{Constants.List}");
                 allFiles = ListReader.GenerateFileList(Path.Combine(rootTempDir, Constants.ResourceDir));
             }
             else
@@ -95,33 +90,33 @@ namespace Maintenance.Lib.Domain
             {
                 var script1 = Path.Combine(rootTempDir, Constants.ScriptsBeforeReplace);
                 if (File.Exists(script1))
-                    OnLogCustome?.Invoke(o, Executor.Run(script1));
+                    Log.Logger.Information(Executor.Run(script1));
 
-                OnLogInfo?.Invoke(o, $"正在更新文件...");
+                Log.Logger.Information($"正在更新文件...");
                 CopyDirectory(Path.Combine(rootTempDir, Constants.ResourceDir), updateDir);
-                OnLogInfo?.Invoke(o, $"更新完成");
+                Log.Logger.Information($"更新完成");
 
                 var script0 = Path.Combine(rootTempDir, Constants.ScriptsFinally);
                 if (File.Exists(script0))
-                    OnLogCustome?.Invoke(o, Executor.Run(script0));
+                    Log.Logger.Information(Executor.Run(script0));
 
                 return true;
             }
             catch (Exception ex)
             {
-                OnLogError?.Invoke(o, $"更新失败，即将回滚。失败原因：{ex.Message}");
+                Log.Logger.Error( $"更新失败，即将回滚。失败原因：{ex.Message}");
                 CopyFileList(allFiles, bkDir, updateDir);
                 return false;
             }
             finally
             {
-                OnLogInfo?.Invoke(o, $"正在清理临时文件...");
+                Log.Logger.Information($"正在清理临时文件...");
                 if (Directory.Exists(rootTempDir))
                     Directory.Delete(rootTempDir, true);
 
                 if (shoudDeleteTempFile)
                     File.Delete(patchFile);
-                OnLogInfo?.Invoke(o, $"清理完成");
+                Log.Logger.Information($"清理完成");
             }
         }
 
@@ -196,7 +191,7 @@ namespace Maintenance.Lib.Domain
             }
             catch (Exception ex)
             {
-                OnLogError?.Invoke(ex, $"下载失败：{ex.Message}");
+                Log.Logger.Error($"下载失败：{ex.Message}");
                 return null;
             }
         }

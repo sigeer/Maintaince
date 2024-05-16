@@ -1,6 +1,7 @@
 ﻿using CommandLine;
-using Maintenance.Lib.Domain;
 using Maintenance.Lib;
+using Maintenance.Lib.Domain;
+using Serilog;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
@@ -13,6 +14,9 @@ public class Program
     [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(UninstallationOptions))]
     public static void Main(string[] args)
     {
+        Log.Logger = new LoggerConfiguration()
+            .WriteTo.Console()
+            .CreateLogger();
 
         var mainModule = Process.GetCurrentProcess().MainModule;
         if (mainModule == null)
@@ -23,18 +27,6 @@ public class Program
             System.Console.WriteLine("原因3：未知。");
             return;
         }
-
-        PackDomain.OnLogError += (obj, e) => Message.ShowMessageWithColor(ConsoleColor.Red, e);
-        PackDomain.OnLogInfo += (obj, e) => Message.ShowMessageWithColor(ConsoleColor.Blue, e);
-        PackDomain.OnLogSuccess += (obj, e) => Message.ShowMessageWithColor(ConsoleColor.DarkGreen, e);
-        PackDomain.OnLogWarn += (obj, e) => Message.ShowMessageWithColor(ConsoleColor.Yellow, e);
-
-        UpdationDomain.OnLogError += (obj, e) => Message.ShowMessageWithColor(ConsoleColor.Red, e);
-        UpdationDomain.OnLogInfo += (obj, e) => Message.ShowMessageWithColor(ConsoleColor.Blue, e);
-        UpdationDomain.OnLogSuccess += (obj, e) => Message.ShowMessageWithColor(ConsoleColor.DarkGreen, e);
-        UpdationDomain.OnLogWarn += (obj, e) => Message.ShowMessageWithColor(ConsoleColor.Yellow, e);
-
-        UpdationDomain.OnLogCustome += (obj, e) => Message.ShowMessageWithColor(ConsoleColor.DarkYellow, e);
 
         var currentExeFullName = mainModule.FileName;
         Parser.Default.ParseArguments<UninstallationOptions, UpdationOptions, PackOptions>(args)

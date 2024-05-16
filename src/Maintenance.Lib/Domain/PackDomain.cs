@@ -1,14 +1,11 @@
-﻿using System.IO.Compression;
+﻿using Serilog;
+using System.IO.Compression;
 using System.Text.Json;
 
 namespace Maintenance.Lib.Domain
 {
     public class PackDomain
     {
-        public static event EventHandler<string>? OnLogInfo;
-        public static event EventHandler<string>? OnLogError;
-        public static event EventHandler<string>? OnLogSuccess;
-        public static event EventHandler<string>? OnLogWarn;
         public static bool Generate(IPackOptions o, params string[] excepts)
         {
             if (string.IsNullOrWhiteSpace(o.Dir))
@@ -57,7 +54,7 @@ namespace Maintenance.Lib.Domain
                     if (!excepts.Contains(filePath))
                     {
                         var path = Path.GetRelativePath(o.Dir, filePath);
-                        OnLogInfo?.Invoke(o, $"正在打包 {path}");
+                        Log.Logger.Information($"正在打包 {path}");
                         archive.CreateEntryFromFile(filePath, Path.Combine(Constants.ResourceDir, path));
                     }
                 }
